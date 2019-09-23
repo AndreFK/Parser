@@ -1,0 +1,46 @@
+#ifndef TOKENS
+#define TOKENS
+
+enum yytokentype
+{
+    PERIOD = 1,
+    DDPERIOD = 2,
+    INCR = 3,
+    FALSE = 4,
+    TRUE = 5,
+    WHILE = 6,
+    IF = 7,
+    ELSE = 8,
+    RETURN = 9,
+    INICIO = 10,
+    IF_THEN = 11,
+    DO = 12,
+    END = 13,
+    STATIC_TKN = 14,
+    INT_TYPE = 15,
+    ANYTYPE_TYPE = 16,
+    BOOLEAN_TYPE = 17,
+    VOID_TYPE = 18,
+    REAL_TYPE = 19,
+    STRING_TYPE = 20,
+    DATE_TYPE = 21,
+    ID = 22,
+    ADD_OP = 23,
+    MULT_OP = 24,
+    LOG_OP = 25,
+    REL_OP = 26,
+    INT_LITERAL = 27,
+    REAL_LITERAL = 28,
+    STRING_LITERAL = 29,
+    DATE_LITERAL = 30,
+    ERROR = 31,
+    SEMICOLON = 32,
+    PAR_OP = 33,
+    PAR_CL = 34,
+    BRACK_OP = 35,
+    BRACK_CL = 36,
+    COMA = 37,
+    EPSILON = 38,
+    ASSIGN = 39
+};
+#endif

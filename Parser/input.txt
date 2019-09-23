@@ -1,0 +1,10 @@
+
+static void test () {
+    if( 1 >= 3){
+        int x := 5;
+        if(false){
+            int y := 34;
+            string z := "Hola Mundo";
+        }
+    }
+}
