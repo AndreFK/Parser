@@ -12,20 +12,20 @@ void parser::init()
 
 bool parser::Check(yytokentype token)
 {
-    if (token == this->lookahead_token)
+    if (token == this->lookahead)
     {
-        this->lookahead_token = this->lexer->yylex();
-        this->lookahead_token_content = this->lexer->YYText();
+        this->lookahead = this->lexer->yylex();
+        this->lookahead_content = this->lexer->YYText();
         return true;
     }
 
     return false;
 }
 
-void parser::Consume_Token()
+void parser::PopToken()
 {
-    this->lookahead_token = this->lexer->yylex();
-    this->lookahead_token_content = this->lexer->YYText();
+    this->lookahead = this->lexer->yylex();
+    this->lookahead_content = this->lexer->YYText();
 }
 
 bool parser::Program()
@@ -124,41 +124,41 @@ bool parser::funct_type()
 bool parser::decl_type()
 {
     string error_token = lexer->YYText();
-    switch (lookahead_token)
+    switch (lookahead)
     {
     case VOID_TYPE:
         cout<<"VOID_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     case INT_TYPE:
         cout<<"INT_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     case ANYTYPE_TYPE:
         cout<<"ANYTYPE_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     case BOOLEAN_TYPE:
         cout<<"BOOLEAN_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     case REAL_TYPE:
         cout<<"REAL_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     case DATE_TYPE:
         cout<<"DATE_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     case STRING_TYPE:
         cout<<"STRING_TYPE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
         break;
     default:
@@ -170,7 +170,7 @@ bool parser::decl_type()
 
 bool parser::param_list_opt()
 {
-    if (lookahead_token == PAR_CL)
+    if (lookahead == PAR_CL)
     {
 
         return true;
@@ -179,7 +179,7 @@ bool parser::param_list_opt()
     if (decl_param())
     {
         cout<<"DECL_PARAM:="<<endl;
-        if (lookahead_token == PAR_CL) 
+        if (lookahead == PAR_CL) 
         {
     
             return true;
@@ -192,7 +192,7 @@ bool parser::param_list_opt()
             return false;
         }
 
-        if (lookahead_token != PAR_CL)
+        if (lookahead != PAR_CL)
         {
             return param_list_opt();
         }
@@ -245,9 +245,8 @@ bool parser::body()
     {
         if(!Check(BRACK_CL))
         {
-            string error_token = lexer->YYText();
-            Error("ERROR: se esperaba '}', se encontro: " + error_token);
-            return false;
+            return compount_stmt();
+            return true;
         }
 
         return true;
@@ -260,7 +259,7 @@ bool parser::body()
 
 bool parser::compount_stmt()
 {
-    if(lookahead_token == BRACK_CL)
+    if(lookahead == BRACK_CL)
     {
         return true;
     }
@@ -290,7 +289,7 @@ bool parser::stmt_list()
 
 bool parser::stmts()
 {
-    if (lookahead_token == BRACK_CL) //Epsilon
+    if (lookahead == BRACK_CL) //Epsilon
     {
         return true;
     }
@@ -299,25 +298,25 @@ bool parser::stmts()
 }
 
 bool parser::stmt()
-{    if (lookahead_token == WHILE)
+{    if (lookahead == WHILE)
     {
         cout<<"WHILE_STMT:="<<endl;
         return while_stmt();
     }
-    if (lookahead_token == IF)
+    if (lookahead == IF)
     {
         cout<<"IF_STMT:="<<endl;
         return if_stmt();
     }
 
-    if (lookahead_token == RETURN)
+    if (lookahead == RETURN)
     {
         cout<<"RETURN_STMT:="<<endl;
         return return_stmt();
     }
     if (expr_stmt())
     {
-        if (lookahead_token != BRACK_CL) 
+        if (lookahead != BRACK_CL) 
             return stmt();
 
         return true;
@@ -403,9 +402,9 @@ bool parser::return_stmt()
         return false;
     }
 
-    if (lookahead_token == SEMICOLON)
+    if (lookahead == SEMICOLON)
     {
-        Consume_Token();
+        PopToken();
         return true;
     }
     else
@@ -527,15 +526,15 @@ bool parser::function_stmt()
 
 bool parser::bool_expr()
 {
-    if (lookahead_token == TRUE){
+    if (lookahead == TRUE){
         cout<<"FALSE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
     }
-    if(lookahead_token == FALSE)
+    if(lookahead == FALSE)
     {
         cout<<"FALSE"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
     }
 
@@ -559,25 +558,25 @@ bool parser::bool_expr()
 
 bool parser::constant()
 {
-    if (lookahead_token == INT_LITERAL){
+    if (lookahead == INT_LITERAL){
         cout<<"INT_LITERAL"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
     }
-    if(lookahead_token == REAL_LITERAL){
+    if(lookahead == REAL_LITERAL){
         cout<<"REAL_LITERAL"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
     } 
-    if(lookahead_token == DATE_LITERAL){
+    if(lookahead == DATE_LITERAL){
         cout<<"DATE_LITERAL"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
     }
-    if(lookahead_token == STRING_LITERAL)
+    if(lookahead == STRING_LITERAL)
     {
         cout<<"STRING_LITERAL"<<endl;
-        Consume_Token();
+        PopToken();
         return true;
     }
     else
